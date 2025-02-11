@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Faws - a toy archival utility</title>
+<link rel='icon' type='image/png' href='blue_transport.png'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap" rel="stylesheet">
+<style>
+body {
+  background-color: #282b30;
+  margin: 1.5em auto;
+  max-width: 60%;
+}
+
+.content {
+  margin: 40px auto;
+  max-width: 650px;
+  line-height: 1.6;
+  font-size: 18px;
+  color:#444;
+  padding: 0 10px;
+  color: #c0c0c0;
+  font-family: 'Signika';
+} 
+
+h1, h2, h3 {
+  line-height: 1.2;
+  color: #e2e2e2;
+}
+
+a {
+  color: #c0c0c0;
+}
+
+p {
+  color: #cdcdcd;
+  font-weight: 300;
+}
+
+b {
+  color: #e2e2e2;
+}
+
+a:visited {
+  color: #90afb6;
+}
+
+pre {
+  background-color: #171718;
+  border-radius: 20px;
+  white-space: pre-line;
+  padding: 20px;
+  font-size: 12px;
+}
+
+</style>
+</head>
+<body>
+ <div class="content">
+  <a href="https://github.com/faws-vcs/faws">
+    <img class="logo" src="logo.png" />
+  </a>
+  <h3>A toy versioning utility</h3>
+  <p><b>Faws</b> is a version control system for backing up classic software.</p>
+ 
+  <hr/>
+  <h3>Links</h3>
+  <a href="https://github.com/faws-vcs/faws">GitHub repository</a><br/>
+  <a href="https://github.com/faws-vcs/faws/releases/latest">Downloads</a><br/>
+  <a href="https://snapcraft.io/faws">
+    <img alt="Get it from the Snap Store" src=https://snapcraft.io/en/dark/install.svg />
+  </a>
+  <hr/>
+
+  <h3>Familiar design</h3>
+  <p>Just like <a href="https://git-scm.com/">Git</a>, Faws uses a content-addressable filesystem with snapshots to store changes. You could use Faws to pull files from an online or locally-hosted repository, only downloading what you need.</p>
+  
+  <h3>Faws is not the best for source code management</h3>
+  <p>While nothing is stopping you from using Faws to host code projects, it's <i>nowhere near</i> as well suited to that usecase as <a href="https://git-scm.com/">Git</a> or <a href="https://mercurial-scm.org/">Mercurial</a> are. Faws intentionally lacks much of the functionality of those systems.</p>
+  <p>Think of Faws as more of an infrastructure that a software installer would use, rather than infrastructure for hosting source code.</p>
+  
+  <h3>Faws 💙 data hoarders</h3>
+  <p><b>Faws is oriented to the task of managing large collections of software,</b> especially large files that share duplicated contents across versions.</p>
+  <p>Host massive repositories without it eating up <sup>2</sup>&frasl;<sub>3</sub>rds of your CDN's storage space. Faws breaks up your files into regular chunks, which are deduplicated between files.</p>
+  <hr/>
+
+  <h3>Identities</h3>
+  <p>To frustrate any tampering attacks, all Faws commits are digitally signed with an <b>Identity keypair.</b></p>
+  <pre>
+    # create a signing identity
+    faws id create --nametag john.doe
+
+    # list your identities
+    faws id ls
+  </pre>
+
+  <h3>Your first commit</h3>
+  <p>Commits are tracked using <b>tags</b>, conceptually similar to Git tags or branches.</p>
+  <pre>
+    mkdir repo && cd repo <br/>
+    faws init
+
+    # add a named file
+    touch /tmp/named-file.txt
+    faws add named-file.txt /tmp/named-file.txt
+
+    # add a directory hierarchy to root
+    mkdir -p /tmp/directory/hierarchy
+    touch /tmp/directory/hierarchy/nested-file.txt
+    faws add "" /tmp/directory
+    
+    # commit to the tag example-commit
+    faws commit -t example-commit 
+
+    # show tags and associated commit hashes
+    faws ls-tag
+  </pre>
+
+
+  <h3>Checking out</h3>
+  <p>With <code>checkout</code> you can export the contents of a commit, a tree, or an individual file.</p>
+  <pre>
+    faws checkout example-commit /tmp/tagged-snapshot
+  </pre>
+
+  <h3>Downloading a complete repository</h3>
+  <p>Because <code>faws pull</code> works with local files, it can also work with a plain HTTP index website.</p>
+  <pre>
+    mkdir download-repo && cd download-repo
+    faws pull https://example.com/repo/
+  </pre>
+  
+  <h3>Downloading a partial repository</h3>
+  <p>Similar to checkout, you can use <code>shadow</code> to download only a specific tag, commit, or file hash from a local or a remote repository.</p>
+  <pre>
+    mkdir download-repo && cd download-repo
+    faws shadow https://example.com/repo/ example-commit
+  </pre>
+
+</div>
+</body>
+</html>
