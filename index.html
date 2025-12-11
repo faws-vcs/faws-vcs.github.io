@@ -65,13 +65,22 @@ pre {
   <h3>A toy versioning utility</h3>
   <p><b>Faws</b> is a version control system for backing up classic software.</p>
  
+  <h3>Install</h3>
+  <pre>
+    FAWS_INSTALL=$(mktemp -d ~/faws-install.XXX)
+    curl --proto '=https' --tlsv1.2 -sSf -o $FAWS_INSTALL/install.sh https://faws-vcs.github.io/install.sh
+    chmod +x $FAWS_INSTALL/install.sh
+    echo "daef95ecfde091abd4d397c69bf58c3e590fb2bf2fa5e1794d80ef9d252324eb $FAWS_INSTALL/install.sh" | sha256sum --check && $FAWS_INSTALL/install.sh 
+    rm -rf $FAWS_INSTALL
+  </pre>
+
   <hr/>
   <h3>Links</h3>
   <a href="https://github.com/faws-vcs/faws">GitHub repository</a><br/>
   <a href="https://github.com/faws-vcs/faws/releases/latest">Downloads</a><br/>
-  <a href="https://snapcraft.io/faws">
+  <!-- <a href="https://snapcraft.io/faws">
     <img alt="Get it from the Snap Store" src=https://snapcraft.io/en/dark/install.svg />
-  </a>
+  </a> -->
   <hr/>
 
   <h3>Familiar design</h3>
