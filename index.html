@@ -65,13 +65,17 @@ pre {
   <h3>A toy versioning utility</h3>
   <p><b>Faws</b> is a version control system for backing up classic software.</p>
  
-  <h3>Install</h3>
+  <h3>Install (Go method)</h3>
+  <p>(requires <a href="https://go.dev/dl/">Go</a> to be installed and configured.)</p>
   <pre>
-    FAWS_INSTALL=$(mktemp -d ~/faws-install.XXX)
-    curl --proto '=https' --tlsv1.2 -sSf -o $FAWS_INSTALL/install.sh https://faws-vcs.github.io/install.sh
-    chmod +x $FAWS_INSTALL/install.sh
-    echo "daef95ecfde091abd4d397c69bf58c3e590fb2bf2fa5e1794d80ef9d252324eb $FAWS_INSTALL/install.sh" | sha256sum --check && $FAWS_INSTALL/install.sh 
-    rm -rf $FAWS_INSTALL
+    git clone https://github.com/faws-vcs/faws.git faws
+    cd faws
+    go install -v github.com/faws-vcs/faws
+  </pre>
+
+  <h3>Install (YOLO method)</h3>
+  <pre>
+    curl --proto '=https' --tlsv1.2 -H "Accept: application/vnd.github.v3.raw" -sSfL -o https://api.github.com/repos/faws-vcs/faws/git/blobs/bd22bd5ee25f2a6986a3dce36fd0227aa686d915 | sh
   </pre>
 
   <hr/>
@@ -121,31 +125,34 @@ pre {
     faws add "" /tmp/directory
     
     # commit to the tag example-commit
-    faws commit -t example-commit 
+    faws commit -t my-tag
 
     # show tags and associated commit hashes
-    faws ls-tag
+    faws tag
   </pre>
 
 
   <h3>Checking out</h3>
   <p>With <code>checkout</code> you can export the contents of a commit, a tree, or an individual file.</p>
   <pre>
-    faws checkout example-commit /tmp/tagged-snapshot
+    faws checkout my-tag /tmp/tagged-snapshot
   </pre>
 
   <h3>Downloading a complete repository</h3>
   <p>Because <code>faws pull</code> works with local files, it can also work with a plain HTTP index website.</p>
   <pre>
-    mkdir download-repo && cd download-repo
-    faws pull https://example.com/repo/
+    faws clone https://example.com/repo/ download-repo
   </pre>
   
   <h3>Downloading a partial repository</h3>
   <p>Similar to checkout, you can use <code>shadow</code> to download only a specific tag, commit, or file hash from a local or a remote repository.</p>
   <pre>
     mkdir download-repo && cd download-repo
-    faws shadow https://example.com/repo/ example-commit
+    faws init https://example.com/repo/
+    # download the my-tag tag
+    faws pull --tag my-tag
+    # download the commit
+    faws pull my-tag
   </pre>
 
 </div>
